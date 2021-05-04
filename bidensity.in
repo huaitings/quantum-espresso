@@ -1,0 +1,29 @@
+log none
+units metal 
+dimension 3 
+boundary p p p 
+atom_style atomic 
+atom_modify map array
+
+variable den_out equal 5.513
+
+
+read_data ../atomsk.lmp
+
+group type1 type 1 
+group type2 type 2
+set group type2 type 6
+set group type1 type 5
+
+pair_style none
+
+variable den_in equal density
+variable den_ratio equal ${den_in}/${den_out}
+variable den_scale equal ${den_ratio}^(1.0/3.0)
+
+#print $(density)
+#print ${den_scale}
+
+change_box all x scale ${den_scale} y scale ${den_scale} z scale ${den_scale} remap
+write_data Al14Mo12Nb22Ta25Ti22Zr07.data
+#print $(density)
