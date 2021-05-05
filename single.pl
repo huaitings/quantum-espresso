@@ -10,8 +10,8 @@ my $currentPath = getcwd(); #get perl code path
 # Initial setting
 my $slurmbatch = "slurm.sh"; # slurm batch template
 my $lmp_path = "/opt/lammps/lmp_mpi_bigwind";
-my @myelement = sort ("Al","Mo","Nb","Ta","Ti","Zr");
-my $foldername = "./".join("",@myelement)."/single"; #folder to keep all generated files
+my @myelement = sort ("Co","Cr","Fe","Hf","Mn","Nb","Ni","Ta","Ti","Zr");
+my $foldername = "$currentPath/".join("",@myelement)."/single"; #folder to keep all generated files
 `mkdir -p $foldername`; # create a new folder
 my $lmp_in = "singledensity.in";
 my $lmp_data = "atomsk.lmp";
@@ -76,12 +76,13 @@ for (reverse 1..@myelement){# for lammps type ID starting from 1
 	`sed -i '/#sed_anchor01/a #SBATCH --output=$myelement[$i].sout' $slurmbatch`;
 
 	`sed -i '/mpiexec.*/d' $slurmbatch`;
-	`sed -i '/#sed_anchor02/a $lmp_path -l none -in $myelement[$i].in' $slurmbatch`;
+	`sed -i '/#sed_anchor02/a mpiexec $lmp_path -l none -in $myelement[$i].in' $slurmbatch`;
 
  	`cp $slurmbatch $foldername/$myelement[$i].sh`;
 
-	chdir("$currentPath/$foldername");	
+	chdir("$foldername");
 	system("sbatch $myelement[$i].sh");
 	chdir("$currentPath");
 	
 }
+
