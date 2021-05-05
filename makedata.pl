@@ -2,13 +2,13 @@ use strict;
 use warnings;
 use Cwd;
 my $currentPath = getcwd();
-my @myelement = sort ("Co","Cr","Fe","Hf","Mn","Nb","Ni","Ta","Ti","Zr");
+my @myelement = sort ("Al","Mo","Nb","Ta","Ti","Zr");
 my $myelement = join ('',@myelement);
 
-my $out_file = `find ./$myelement/Opt -name "*.out"`;
+my $out_file = `find $currentPath/$myelement/Opt -name "*.sout"`;
 my @out_file = split("\n", $out_file);
 @out_file = sort @out_file;
-
+print @out_file;
 for my $id (0..$#out_file){
 open my $all ,"< $out_file[$id]";
 my @all = <$all>;
@@ -16,7 +16,7 @@ close($all);
 my $natom = `cat $out_file[$id]|sed -n '/number of atoms\\/cell/p' | sed -n '\$p'| awk '{print \$5}'`;
 chomp $natom;
 if(!$natom){die "You don't get the Atom Number!!!\n";}
-my @dataname = map (($_ =~ m/(Opt-\w+-\w+)\.out/g),$out_file[$id]);
+my @dataname = map (($_ =~ m/(Opt-\w+-\w+)\.sout/g),$out_file[$id]);
 open my $data ,"> ./$myelement/Opt/@dataname/@dataname.data";
 print $data "LAMMPS data file via write_data, version 10 Mar 2021, timestep = 0\n";
 for(@all){
@@ -46,6 +46,7 @@ print $data "@{$box[-3]}[1] @{$box[-3]}[2] @{$box[-2]}[2] xy xz yz\n";
 print $data "Masses\n\n";
 my $element = `cat $out_file[$id] | sed -n -r '/^\\s+[A-Z][a-z]\\s+[0-9]./p' | sort | uniq |awk '{print \$1}'`;
 my @element = split("\n",$element);
+@element = sort @element;
 my %element;
 for (my $i=1; $i<=@element; $i++){
     my $r = $i-1;
@@ -63,8 +64,8 @@ print $data "$i "."$mass[$_]\n";
 my @coord = grep {if(m/^(\w+)\s+([-+]?\d+\.?\d+\s+[-+]?\d+\.?\d+\s+[-+]?\d+\.?\d+)$/gm){
 $_ = [$1,$2];}} @all;
 print $data "Atoms\n\n";
-for(reverse 1..$natom){
-print $data "$_ "."$element{$coord[$_][0]}\t"."$coord[-$_][1]\n";
+for(1..$natom){
+print $data "$_ "."$element{$coord[-$_][0]}\t"."$coord[-$_][1]\n";
 # print $element{" @{$mass[$_ -1]}[0]"};
 }
 }
