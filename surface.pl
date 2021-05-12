@@ -2,7 +2,7 @@
 #use warnings;
 use  Cwd;
 my $path = getcwd();
-my @myelement = sort ("Co","Cr","Fe","Mn","Ni"); #!!!!
+my @myelement = sort ("Al","Mo","Nb","Ta","Ti","Zr"); #!!!!
 my $myelement = join ('',@myelement);
 my @slabsurface = ("100","110","111");
 my $foldername = `find  ./$myelement/Opt -type d -name "Opt-*"`;
