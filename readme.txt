@@ -7,7 +7,7 @@
                       run HEA_swap.pl
                       run HEA_optimize.pl
 3. All structure need to optimize
-    * lmp2QEinput.pl : can transfer all data to QE input,and run optimization (get QE output)
+    * MD.pl : can transfer all data to QE input,and run optimization (get QE output)
     * makedata.pl    : can get data after optimization ()
 4. After optimize , you can run MD, void, surface  
    * MD_lmp2QEinput.pl : can transfer optimization data to MD input,and run MD
