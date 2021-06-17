@@ -1,26 +1,40 @@
 &CONTROL
-pseudo_dir = '/opt/QEpot/SSSP_precision_pseudos/'
 calculation = "vc-relax"
-wfcdir = /null
+wf_collect = .FALSE.
+nstep          = 100
+disk_io = nowf
+pseudo_dir = '/opt/QEpot/SSSP_precision_pseudos/'
 /
 
 &SYSTEM
 occupations = "smearing"
-ecutwfc = 4.89484e+01
-nat = 0
 smearing = "gaussian"
+nat = 0
 ntyp = 10
-ibrav = 0
+ecutwfc = 4.89484e+01
 ecutrho = 4.40535e+02
-nosym = .TRUE
+nosym = .TRUE.
 degauss = 1.00000e-02
+ibrav = 0
+nspin = 2
+starting_magnetization(10) =  2.00000e-01
+starting_magnetization(9) =  2.00000e-01
+starting_magnetization(8) =  2.00000e-01
+starting_magnetization(7) =  2.00000e-01
+starting_magnetization(6) =  2.00000e-01
+starting_magnetization(5) =  2.00000e-01
+starting_magnetization(4) =  2.00000e-01
+starting_magnetization(3) =  2.00000e-01
+starting_magnetization(2) =  2.00000e-01
+starting_magnetization(1) =  2.00000e-01
+!systemend
 /
 
 &ELECTRONS
 startingwfc = "atomic+random"
-mixing_beta = 4.00000e-01
-electron_maxstep = 200
-conv_thr = 1.00000e-06
+mixing_beta  =  4.00000e-01
+electron_maxstep = 1000
+conv_thr = 1.00000e-08
 startingpot = "atomic"
 /
 
@@ -51,4 +65,4 @@ Ti  47.867  Ti_pbe_v1.4.uspp.F.UPF
 Zr  91.224  Zr_pbe_v1.uspp.F.UPF
 ATOMIC_POSITIONS {angstrom}
 CELL_PARAMETERS {angstrom}
-#End
+!End

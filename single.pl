@@ -10,8 +10,8 @@ my $currentPath = getcwd(); #get perl code path
 # Initial setting
 my $slurmbatch = "slurm.sh"; # slurm batch template
 my $lmp_path = "/opt/lammps/lmp_mpi_bigwind";
-my @myelement = sort ("Al","Mo","Nb","Ta","Ti","Zr");
-my $foldername = "./".join("",@myelement)."/single"; #folder to keep all generated files
+my @myelement = sort ("Co","Cr","Fe","Hf","Mn","Nb","Ni","Ta","Ti","Zr");
+my $foldername = "$currentPath/".join("",@myelement)."/data/single"; #folder to keep all generated files
 `mkdir -p $foldername`; # create a new folder
 my $lmp_in = "singledensity.in";
 my $lmp_data = "atomsk.lmp";
@@ -32,7 +32,7 @@ my $c =${$myelement{$myelement[$i]}}[4];
 my $crystal = "$structure $a $myelement[$i]" ;
 $crystal = "$structure $a $c $myelement[$i]" if ($structure eq "hcp");
 my $orient = "[100] [010] [001]";# crystal axis vectors
-my $dup = "2 2 2";
+my $dup = "1 1 1";
 my $type1 = $i+1;
 my $atomsk = "atomsk --create $crystal orient $orient -dup $dup $lmp_data";
 $atomsk ="atomsk --create $crystal -dup $dup $lmp_data" if($structure eq "hcp");
@@ -76,11 +76,11 @@ for (reverse 1..@myelement){# for lammps type ID starting from 1
 	`sed -i '/#sed_anchor01/a #SBATCH --output=$myelement[$i].sout' $slurmbatch`;
 
 	`sed -i '/mpiexec.*/d' $slurmbatch`;
-	`sed -i '/#sed_anchor02/a $lmp_path -l none -in $myelement[$i].in' $slurmbatch`;
+	`sed -i '/#sed_anchor02/a mpiexec $lmp_path -l none -in $myelement[$i].in' $slurmbatch`;
 
  	`cp $slurmbatch $foldername/$myelement[$i].sh`;
 
-	chdir("$currentPath/$foldername");	
+	chdir("$foldername");
 	system("sbatch $myelement[$i].sh");
 	chdir("$currentPath");
 	

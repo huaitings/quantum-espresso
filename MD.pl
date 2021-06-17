@@ -10,7 +10,7 @@ my $QE_path = "/opt/QEGCC/bin/pw.x";
 my @pressure = ("-0","+500","-500");  #!!!!!! pressure !!!!!!
 my @temperature = ("0.1","200"); #!!!!!! temperature !!!!!!
 
-my $foldername = `find  ./$myelement/Opt -type d -name "Opt-*"`;
+my $foldername = `find  $path/$myelement/Opt -type d -name "Opt-*"`;
 my @foldername = split("\n", $foldername);
 @foldername = sort @foldername;
 

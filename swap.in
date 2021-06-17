@@ -1,0 +1,59 @@
+log none
+# ---------- Initialize Simulation --------------------- 
+clear 
+units metal 
+dimension 3 
+boundary p p p 
+atom_style atomic 
+atom_modify map array
+
+read_data /home/kevin/quantum-espresso/HfNbTaTiZr/initial/out-bcc-Hf20Nb20Ta20Ti20Zr20.data
+
+# ---------- Define Interatomic Potential --------------------- 
+pair_style lj/cut 5
+pair_coeff 4 5 10  2.63
+pair_coeff 3 5 10  2.63
+pair_coeff 3 4 10  2.63
+pair_coeff 2 5 10  2.63
+pair_coeff 2 4 10  2.63
+pair_coeff 2 3 10  2.63
+pair_coeff 1 5 10  2.63
+pair_coeff 1 4 10  2.63
+pair_coeff 1 3 10  2.63
+pair_coeff 1 2 10  2.63
+pair_coeff 5 5 0 2.63
+pair_coeff 4 4 0 2.63
+pair_coeff 3 3 0 2.63
+pair_coeff 2 2 0 2.63
+pair_coeff 1 1 0 2.63
+neighbor 1.0 bin 
+neigh_modify delay 10 check yes
+
+
+thermo 1 
+thermo_style custom step pe  
+fix 109 all atom/swap 1 200 4590 300.0 ke no types 4 5
+fix 108 all atom/swap 1 200 8832 300.0 ke no types 3 5
+fix 107 all atom/swap 1 200 1502 300.0 ke no types 3 4
+fix 106 all atom/swap 1 200 4805 300.0 ke no types 2 5
+fix 105 all atom/swap 1 200 1415 300.0 ke no types 2 4
+fix 104 all atom/swap 1 200 6732 300.0 ke no types 2 3
+fix 103 all atom/swap 1 200 941 300.0 ke no types 1 5
+fix 102 all atom/swap 1 200 9735 300.0 ke no types 1 4
+fix 101 all atom/swap 1 200 12 300.0 ke no types 1 3
+fix 100 all atom/swap 1 200 4461 300.0 ke no types 1 2
+
+run 50
+unfix 109
+unfix 108
+unfix 107
+unfix 106
+unfix 105
+unfix 104
+unfix 103
+unfix 102
+unfix 101
+unfix 100
+
+write_data swap-bcc-Hf20Nb20Ta20Ti20Zr20.data
+ 

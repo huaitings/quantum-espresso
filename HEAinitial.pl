@@ -8,16 +8,16 @@ my $currentPath = getcwd(); #get perl code path
 # Initial setting
 my $slurmbatch = "slurm.sh"; # slurm batch template
 my $lmp_path = "/opt/lammps/lmp_mpi_bigwind";
-my @myelement = sort ("Al","Mo","Nb","Ta","Ti","Zr");
-my @assignfraction = map {$_ = 1;} 0..$#myelement;# assigned fractions for each element
-my $assignfraction = "no";# use assign fraction
+my @myelement = sort ("Co","Cr","Fe","Mn","Ni");
+my @assignfraction = map {$_ = 1;} 0..$#myelement;# assigned fractions for ch element
+my $assignfraction = "yes";# use assign fraction
 my $genNo = 10;# the total structures with random fractions you want to generate 
 $genNo = 1 if ($assignfraction eq "yes");# only one struture for assigned fraction
-my $foldername = "./".join("",@myelement)."/initial"; #folder to keep all generated files
+my $foldername = "$currentPath/".join("",@myelement)."/initial"; #folder to keep all generated files
 `mkdir -p $foldername`; # create a new folder
 my $lmp_in = "density.in";
 my $lmp_data = "atomsk.lmp";# atomsk output file for lmp data file
-my $structure = "bcc";
+my $structure = "fcc";
 my $crystal = "$structure 3.597 Ta";# crystal information
 my $orient = "[100] [010] [001]";# crystal axis vectors
 my $dup = "3 3 3";
@@ -95,38 +95,38 @@ for (1..$genNo){
 	my $prefix;
 	for (0..$#myelement){
 		my $temp = sprintf("%02d",$recipe{$myelement[$_]});
-		$prefix .= "$structure-"."$myelement[$_]"."$temp";
+		$prefix .= "$myelement[$_]"."$temp";
 	}
 
-	`cp $lmp_in $foldername/$prefix.in`;
+	`cp $lmp_in $foldername/$structure-$prefix.in`;
 
-	`cp $lmp_data $foldername/in_$prefix.data`;
+	`cp $lmp_data $foldername/in_$structure-$prefix.data`;
 
-	my $read_data = "read_data in_$prefix.data";
-	`sed -i 's:.*read_data.*:$read_data:' $foldername/$prefix.in`;# modify atom type numbers for the system you want
-	my $write_data = "write_data out-$prefix.data";
-	`sed -i 's:.*write_data.*:$write_data:' $foldername/$prefix.in`;# modify atom type numbers for the system you want
-    `sed -i '/log/d' $foldername/$prefix.in`;
+	my $read_data = "read_data in_$structure-$prefix.data";
+	`sed -i 's:.*read_data.*:$read_data:' $foldername/$structure-$prefix.in`;# modify atom type numbers for the system you want
+	my $write_data = "write_data out-$structure-$prefix.data";
+	`sed -i 's:.*write_data.*:$write_data:' $foldername/$structure-$prefix.in`;# modify atom type numbers for the system you want
+    `sed -i '/log/d' $foldername/$structure-$prefix.in`;
 
-    `sed -i '1i log none' $foldername/$prefix.in`; # no log from lammps
+    `sed -i '1i log none' $foldername/$structure-$prefix.in`; # no log from lammps
 
     
 
 ### making slurm batch files
 
     `sed -i '/#SBATCH.*--job-name/d' $slurmbatch`;
-	`sed -i '/#sed_anchor01/a #SBATCH --job-name=$prefix' $slurmbatch`;
+	`sed -i '/#sed_anchor01/a #SBATCH --job-name=$structure-$prefix' $slurmbatch`;
 	`sed -i '/#SBATCH.*--output/d' $slurmbatch`;
-	`sed -i '/#sed_anchor01/a #SBATCH --output=$prefix.sout' $slurmbatch`;
+	`sed -i '/#sed_anchor01/a #SBATCH --output=$structure-$prefix.sout' $slurmbatch`;
 
 	`sed -i '/mpiexec.*/d' $slurmbatch`;
-	`sed -i '/#sed_anchor02/a mpiexec $lmp_path -l none -in $prefix.in' $slurmbatch`;
+	`sed -i '/#sed_anchor02/a mpiexec $lmp_path -l none -in $structure-$prefix.in' $slurmbatch`;
 
 
-	`cp $slurmbatch $foldername/$prefix.sh`;
+	`cp $slurmbatch $foldername/$structure-$prefix.sh`;
 
-	chdir("$currentPath/$foldername");	
-	system("sbatch $prefix.sh");
+	chdir("$foldername");	
+	system("sbatch $structure-$prefix.sh");
 	chdir("$currentPath");
 
 }

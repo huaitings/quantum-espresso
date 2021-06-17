@@ -5,10 +5,10 @@ boundary p p p
 atom_style atomic 
 atom_modify map array
 
-variable den_out equal 7.88154152663812
-variable beg index 1 13 20 29 37 45
-variable end index 12 19 28 36 44 54
-variable atomtype index 1 2 3 4 5 6
+variable den_out equal 8.0164
+variable beg index 1 23 45 66 88
+variable end index 22 44 65 87 108
+variable atomtype index 1 2 3 4 5
 
 read_data ../atomsk.lmp
 

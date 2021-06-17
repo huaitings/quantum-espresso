@@ -6,21 +6,23 @@ use HEA;
 use Cwd; #Find Current Path
 my $currentPath = getcwd(); #get perl code path
 
+
 # Initial setting
 my $slurmbatch = "slurm.sh"; # slurm batch template
 my $lmp_path = "/opt/lammps/lmp_mpi_bigwind";
 
-my @myelement = sort ("Al","Mo","Nb","Ta","Ti","Zr");
+my @myelement = sort ("Co","Cr","Fe","Hf","Mn","Nb","Ni","Ta","Ti","Zr");
 # my @assignfraction = map {$_ = 1;} 0..$#myelement;# assigned fractions for each element
 # my $assignfraction = "no";# use assign fraction
 my $genNo = 30;# the total structures with random fractions you want to generate 
 # $genNo = 1 if ($assignfraction eq "yes");# only one struture for assigned fraction
-my $foldername = "./".join("",@myelement)."/binary"; #folder to keep all generated files
+my $foldername = "$currentPath/".join("",@myelement)."/data/binary"; #folder to keep all generated files
 `mkdir -p $foldername`; # create a new folder
 my $lmp_in ="bidensity.in";
 my $lmp_data = "atomsk.lmp";# atomsk output file for lmp data file
-my $structure = "B1";
-my $crystal ="$structure 3.597 Ta Ti";# crystal information
+my $structure = "fcc";
+my $structure_name = "B1";
+my $crystal ="$structure 5 Ta Ti";# crystal information
 my $orient = "[100] [010] [001]";# crystal axis vectors
 my $dup = "1 1 1";
 # end of initial setting
@@ -62,7 +64,7 @@ for (my $ipair1 =0 ; $ipair1 < $eleNo; $ipair1++) {
 		`sed -i 's:.*variable den_out equal.*:$var_bi_den:' $lmp_in`;
 		`sed -i '/group type2.*/a set group type1 type $type1' $currentPath/$lmp_in`;
 		`sed -i '/group type2.*/a set group type2 type $type2' $currentPath/$lmp_in`;
-		my $bi_prefix .= "$structure-"."$myelement[$ipair1]"."$myelement[$ipair2]";
+		my $bi_prefix = "$structure_name-"."$myelement[$ipair1]"."$myelement[$ipair2]";
 		`cp $lmp_in $foldername/$bi_prefix.in`;
 		`cp $lmp_data $foldername/in_"$bi_prefix".data`;
 
@@ -88,7 +90,7 @@ for (my $ipair1 =0 ; $ipair1 < $eleNo; $ipair1++) {
  	`cp $slurmbatch $foldername/$bi_prefix.sh`;
 
 	
-	chdir("$currentPath/$foldername");	
+	chdir("$foldername");	
 	system("sbatch $bi_prefix.sh");
 	chdir("$currentPath");
 		}

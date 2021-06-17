@@ -9,4 +9,4 @@
 export LD_LIBRARY_PATH=/opt/mpich-3.3.2/lib:/opt/intel/mkl/lib/intel64:$LD_LIBRARY_PATH
 export PATH=/opt/mpich-3.3.2/bin:$PATH
 #sed_anchor02
-mpiexec /opt/QEGCC/bin/pw.x -in Opt-hcp-Zr.in
+mpiexec /opt/QEGCC_MPICH3.3.2/bin/pw.x -in Opt-hcp-Zr.in
