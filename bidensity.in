@@ -12,8 +12,8 @@ read_data ../atomsk.lmp
 
 group type1 type 1 
 group type2 type 2
-set group type2 type 6
-set group type1 type 5
+set group type2 type 10
+set group type1 type 9
 
 pair_style none
 

@@ -18,7 +18,7 @@ variable den_out equal 6.52
 read_data ../atomsk.lmp
 
 group type1 type 1 
-set group type1 type 6
+set group type1 type 10
 pair_style none
 
 
