@@ -11,10 +11,9 @@
     * Opt.in: your template of QE optimization input
 4. All structure need to optimize
     * MD.pl : can transfer all data to QE input,and run optimization (get QE output)
-    * makedata.pl    : can get data after optimization ()
+    * makedata.pl    : can get data after optimization 
+    * MDdata.pl : can make ovito's animation
 5. After optimize , you can run MD, void, surface  
-   * MD_lmp2QEinput.pl : can transfer optimization data to MD input,and run MD
-   (can modify pressure & temperature)
    * surface.pl : can transfer optimization data to surface input,and run 
    * void.pl : can transfer optimization data to void input,and run MD
 6. After run MD and elastic constant,you can get many refdata ,refdata is 
