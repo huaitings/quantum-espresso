@@ -1,5 +1,12 @@
 #use strict;
 #use warnings;
+#use GD::Graph::lines; #折線圖
+use GD::Graph::linespoints;	
+use GD::Graph::Data;
+use List::Util qw(max);
+use List::Util qw(min);
+#use List::Util;
+use POSIX;
 use Math::Trig;
 use  Cwd;
 my $path = getcwd();
@@ -10,15 +17,19 @@ my @output = `cat *.sout`;
 my @myelement = sort ("Al","Mo","Nb","Ta","Ti","Zr");
 my $myelement = join ('',@myelement);
 
-#$atomscell=2;
+
 #\s+number\s+of\s+atoms\/cell\s+=\s+(\d+)
 for(0..$#output){
    if($output[$_] =~ m/\s+number\s+of\s+atoms\/cell\s+=\s+(\d+)/g)
   {
     $atomscell = $1;
   }
+     if($output[$_] =~ m/\s+nstep\s+=\s+(\d+)/g)
+  {
+    $nstep = $1;
+  }
 }
-#print $atomscell;
+print $nstep;
 @CELL_PARAMETERS = `grep -A3 "CELL_PARAMETERS (angstrom)" *.sout`;
 for(0..$#CELL_PARAMETERS ){
    if($CELL_PARAMETERS [$_] =~ m/\s+(\-?\d+\.\d+)\s+(\-?\d+\.\d+)\s+(\-?\d+\.\d+)/g)
@@ -106,3 +117,18 @@ print $data "$number"." $mynewelement{@newelement[$_]}"."  @newcoord[$_]\n";}
 @newelement=();
 }
 }
+
+ @density = `cat *.sout |grep density`;
+#print @density;
+for(0..$#density){
+     if($density[$_] =~ m/\s+density\s+=\s+(\d+\.\d+)\s+g\/cm\^3/g)
+  {
+    push @QEdensity,"$1\n";
+  }
+}
+open $density ,">density.txt";
+for(0..$nstep-1)
+{
+  $step = $_ + 1;
+print $density "$step"." @QEdensity[$_]";}
+system("perl lines.pl");
