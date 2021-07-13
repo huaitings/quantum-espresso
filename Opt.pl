@@ -112,7 +112,6 @@ my $xy = 0;
 my $xz = 0;
 my $yz = 0;
 
-  print "@ele\n @cutoff\n";
 
   ###ATOMIC_SPECIES###
   for(reverse @ele){
