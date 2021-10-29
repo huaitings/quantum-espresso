@@ -8,7 +8,7 @@ my $currentPath = getcwd(); #get perl code path
 # Initial setting
 my $slurmbatch = "slurm.sh"; # slurm batch template
 my $lmp_path = "/opt/lammps/lmp_mpi_bigwind";
-my @myelement = sort ("Co","Cr","Fe","Mn","Ni");
+my @myelement = sort ("Al","Mo","Nb","Ta","Ti","Zr");
 my @assignfraction = map {$_ = 1;} 0..$#myelement;# assigned fractions for ch element
 my $assignfraction = "yes";# use assign fraction
 my $genNo = 10;# the total structures with random fractions you want to generate 
