@@ -17,7 +17,7 @@ my $foldername = "$currentPath/".join("",@myelement)."/initial"; #folder to keep
 `mkdir -p $foldername`; # create a new folder
 my $lmp_in = "density.in";
 my $lmp_data = "atomsk.lmp";# atomsk output file for lmp data file
-my $structure = "fcc";
+my $structure = "bcc";
 my $crystal = "$structure 3.597 Ta";# crystal information
 my $orient = "[100] [010] [001]";# crystal axis vectors
 my $dup = "3 3 3";
