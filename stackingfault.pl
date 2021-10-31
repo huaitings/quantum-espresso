@@ -53,7 +53,7 @@ for my $id (0..$#foldername)
     if (-e "$path/$myelement/Opt/Opt-@dataname/Opt-@dataname.data")
     {     
         chdir("$path/$myelement/Opt/Opt-@dataname");
-        system("atomsk Opt-@dataname.data -duplicate 1 1 2 Opt-@dataname-supercell.lmp");
+        system("atomsk Opt-@dataname.data -duplicate 1 1 6 Opt-@dataname-supercell.lmp");
         system("mv $path/$myelement/Opt/Opt-@dataname/Opt-@dataname-supercell.lmp $path/$myelement/Opt/Opt-@dataname/stackingfault");
         chdir("$path");
     }
@@ -114,7 +114,7 @@ for(@data1){
       $atoms = $1;
       `sed -i 's:^nat.*:nat = $1:' $path/$myelement/Opt/Opt-$filename[$SFid]/stackingfault/scf-$filename[$SFid].in`;
     }
-    if(m/(\-?\d*\.*\d*\w*\+?-?\d*)\s\-?\d*\.*\d*\w*\+?-?\d*\sxlo/s){
+    if(m/\s+([+-]?\d+\.*\d+)\s+[+-]?\d+\.*\d+\s+xlo\s+xhi/s){
     $move = $1;
     }
     
@@ -133,7 +133,7 @@ for (@data1){
       ###### zlo #######
       ### 0.0 2.84708568799983 zlo zhi
       if(m/\s+([+-]?\d+\.*\d+)\s+([+-]?\d+\.*\d+)\s+zlo\s+zhi/s){
-          $lz = $2-$1;
+          $lz = $2-$1+10;
       }
       ###### xy xz yz #######
       ### -2.65999959883181e-07 9.26000039313875e-07 5.16000064963272e-07 xy xz yz
